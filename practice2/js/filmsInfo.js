@@ -1,3 +1,5 @@
+'use strict';
+
 let numberOfFilms = '';
 while (numberOfFilms === null || numberOfFilms.length === 0) {
     numberOfFilms = prompt('How much films have you watched?', '');
