@@ -138,4 +138,68 @@ window.addEventListener('DOMContentLoaded', function() {
         }
     }
     window.addEventListener('scroll', showModalByScroll);
+
+    // Using classes for creating of menu cards
+
+    class MenuCard {
+        constructor(src, alt, title, descr, price, parentSelector, ...classes) {
+            this.src = src;
+            this.alt = alt;
+            this.title = title;
+            this.descr = descr;
+            this.price = price;
+            this.classes = classes;
+            this.parent = document.querySelector(parentSelector);
+        }
+
+        render() {
+            const element = document.createElement('div');
+
+            if (this.classes.length === 0) {
+                this.classes = "menu__item";
+                element.classList.add(this.classes);
+            } else {
+                this.classes.forEach(className => element.classList.add(className));
+            }
+
+            element.innerHTML = `
+            <img src=${this.src} alt=${this.alt}>
+            <h3 class="menu__item-subtitle">${this.title}</h3>
+            <div class="menu__item-descr">${this.descr}</div>
+            <div class="menu__item-divider"></div>
+            <div class="menu__item-price">
+                <div class="menu__item-cost">Price:</div>
+                <div class="menu__item-total"><span>${this.price}</span> eur/day</div>
+            </div>
+        `;
+            this.parent.append(element);
+        }
+    }
+
+    new MenuCard(
+        "img/tabs/vegy.jpg",
+        "vegy",
+        'Menu "Fitness"',
+        '"Fitness" menu is a new approach to cooking: more fresh fruit and vegetables. For people who are interested in sports; active and healthy. It is a completely new product with optimal price and high quality!',
+        9,
+        ".menu .container"
+    ).render();
+
+    new MenuCard(
+        "img/tabs/post.jpg",
+        "post",
+        'Menu "Lenten"',
+        'The “Lenten” menu is a careful selection of ingredients: a complete absence of animal products, milk from almonds, oats, coconut or buckwheat, the right amount of proteins from tofu and imported vegetarian steaks.',
+        14,
+        ".menu .container"
+    ).render();
+
+    new MenuCard(
+        "img/tabs/elite.jpg",
+        "elite",
+        'Menu “Premium”',
+        'In the “Premium” menu we use not only beautiful packaging design, but also high-quality execution of dishes. Red fish, seafood, fruits - a restaurant menu without going to a restaurant!',
+        21,
+        ".menu .container"
+    ).render();
 });
