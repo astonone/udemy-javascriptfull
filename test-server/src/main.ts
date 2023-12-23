@@ -9,12 +9,17 @@ import { IFoodDeliveryController } from './food-delivery/controller/food-deliver
 import { App } from './app';
 import { IConfigService } from './config/config.service.interface';
 import { ConfigService } from './config/config.service';
+import { JsonDbService } from './database/JsonDbService';
+import { IFoodDeliveryService } from './food-delivery/service/food-delivery.service.interface';
+import { FoodDeliveryService } from './food-delivery/service/food-delivery.service';
 
 export const appBindings = new ContainerModule((bind: interfaces.Bind) => {
 	bind<ILogger>(TYPES.ILogger).to(LoggerService).inSingletonScope();
 	bind<IExceptionFilter>(TYPES.ExceptionFilter).to(ExceptionFilter);
 	bind<IFoodDeliveryController>(TYPES.FoodDeliveryController).to(FoodDeliveryController);
 	bind<IConfigService>(TYPES.ConfigService).to(ConfigService).inSingletonScope();
+	bind<JsonDbService>(TYPES.JsonDbService).to(JsonDbService).inSingletonScope();
+	bind<IFoodDeliveryService>(TYPES.FoodDeliveryService).to(FoodDeliveryService).inSingletonScope();
 	bind<App>(TYPES.Application).to(App);
 });
 
