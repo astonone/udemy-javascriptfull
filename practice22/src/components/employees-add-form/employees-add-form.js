@@ -1,5 +1,6 @@
 import {Button, Card, Form, Input, Modal, Typography} from "antd";
 import {Component} from "react";
+import uniqid from 'uniqid';
 
 class EmployeesAddForm extends Component {
     constructor(props) {
@@ -25,6 +26,7 @@ class EmployeesAddForm extends Component {
             return;
         }
         this.props.onAdd({
+            id: uniqid(),
             name: this.state.name,
             salary: this.state.salary,
             increase: false,
@@ -49,7 +51,7 @@ class EmployeesAddForm extends Component {
 
 
     render() {
-        const {name, salary} = this.props;
+        const {name, salary} = this.state;
 
         return (
             <>

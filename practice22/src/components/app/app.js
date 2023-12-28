@@ -11,18 +11,21 @@ class App extends Component {
         this.state = {
             employees: [
                 {
+                    id: 1,
                     name: 'John Smith',
                     salary: 1500,
                     increase: false,
                     rise: true
                 },
                 {
+                    id: 2,
                     name: 'Ivan Ivanov',
                     salary: 800,
                     increase: true,
                     rise: false
                 },
                 {
+                    id: 3,
                     name: 'Erik Tamm',
                     salary: 2000,
                     increase: false,
@@ -33,10 +36,10 @@ class App extends Component {
         }
     }
 
-    deleteEmployee = (idx) => {
+    deleteEmployee = (id) => {
         this.setState(({employees}) => {
             return {
-                employees: employees.filter((item, index) => index !== idx)
+                employees: employees.filter((item) => item.id !== id)
             }
         });
     }
@@ -49,10 +52,10 @@ class App extends Component {
         });
     }
 
-    onToggleProp = (idx, prop) => {
+    onToggleProp = (id, prop) => {
         this.setState(({employees}) => ({
-            employees: employees.map((item, index) => {
-                if (index === idx) {
+            employees: employees.map((item) => {
+                if (item.id === id) {
                     return {...item, [prop]: !item[prop]}
                 }
                 return item;
@@ -71,14 +74,15 @@ class App extends Component {
     }
 
     filterEmployee = (items, filter) => {
-        if (filter === 'all') {
-            return items;
-        }
-        if (filter === 'promotion') {
-            return items.filter(item => item.increase);
-        }
-        if (filter === 'gt') {
-            return items.filter(item => +(item.salary) > 1000);
+        switch (filter) {
+            case 'all' :
+                return items;
+            case 'promotion' :
+                return items.filter(item => item.increase);
+            case 'gt' :
+                return items.filter(item => item.salary > 1000);
+            default:
+                return items;
         }
     }
 
@@ -92,7 +96,7 @@ class App extends Component {
 
     render() {
         const {employees, term, filter} = this.state;
-        const visibleData = this.searchEmployee(this.filterEmployee(employees, filter), term);
+        const visibleData = this.filterEmployee(this.searchEmployee(employees, term), filter);
 
         return (
             <div className="app">
