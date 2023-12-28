@@ -28,7 +28,8 @@ class App extends Component {
                     increase: false,
                     rise: false
                 }],
-            term: ''
+            term: '',
+            filter: 'all'
         }
     }
 
@@ -69,13 +70,29 @@ class App extends Component {
         })
     }
 
+    filterEmployee = (items, filter) => {
+        if (filter === 'all') {
+            return items;
+        }
+        if (filter === 'promotion') {
+            return items.filter(item => item.increase);
+        }
+        if (filter === 'gt') {
+            return items.filter(item => +(item.salary) > 1000);
+        }
+    }
+
     onSearch = (term) => {
         this.setState({term});
     }
 
+    onFilter = (value) => {
+        this.setState({filter: value});
+    }
+
     render() {
-        const {employees, term} = this.state;
-        const visibleData = this.searchEmployee(employees, term);
+        const {employees, term, filter} = this.state;
+        const visibleData = this.searchEmployee(this.filterEmployee(employees, filter), term);
 
         return (
             <div className="app">
@@ -83,7 +100,9 @@ class App extends Component {
                          increase={employees.filter(item => item.increase).length}
                 />
                 <div className="my-panel">
-                    <SearchFilter onSearch={this.onSearch}/>
+                    <SearchFilter onSearch={this.onSearch}
+                                  onFilter={this.onFilter}
+                    />
                 </div>
                 <div className="my-panel">
                     <EmployeesList

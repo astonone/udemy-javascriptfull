@@ -31,7 +31,7 @@ class SearchFilter extends Component {
                     enterButton
                 />
                 <div className="search-filter-buttons">
-                    <SearchFilterButtons/>
+                    <SearchFilterButtons onFilter={this.props.onFilter}/>
                 </div>
             </Card>
         );
