@@ -24,8 +24,13 @@
         img {
             width: 150px;
             height: 150px;
-            object-fit: cover;
         }
+    }
+    &__image__cover {
+        object-fit: cover;
+    }
+    &__image__contain {
+        object-fit: contain;
     }
     &__btns {
         margin-top: 35px;

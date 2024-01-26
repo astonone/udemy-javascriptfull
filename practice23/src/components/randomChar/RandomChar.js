@@ -93,8 +93,8 @@ class View extends Component {
         return (
             <div className="randomchar__block">
                 <img className={classNames('randomchar__img', {
-                    'randomchar__img_cover' : showCover,
-                    'randomchar__img_contain' : !showCover
+                    'randomchar__img__cover' : showCover,
+                    'randomchar__img__contain' : !showCover
                 })} src={thumbnail} alt="Random character"/>
                 <div className="randomchar__info">
                     <p className="randomchar__name">{name}</p>

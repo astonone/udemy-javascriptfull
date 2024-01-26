@@ -39,7 +39,11 @@ class CharList extends Component {
 
         const errorMessage = error ? <ErrorMessage/> : null;
         const spinner = loading ? <Spinner/> : null;
-        const content = !(loading && error) ? <ul className="char__grid">{chars.map(char => <CharItem char={char} key={char.id}/>)}</ul> : null;
+        const content = !(loading && error)
+            ? <ul className="char__grid">
+                {chars.map(char => <CharItem char={char} key={char.id} onCharSelected={this.props.onCharSelected}/>)}
+              </ul>
+            : null;
 
         return (
             <div className="char__list">
@@ -62,16 +66,17 @@ class CharItem extends Component {
     }
 
     render() {
-        const {char: {name, thumbnail}} = this.props;
+        const {char: {id, name, thumbnail}} = this.props;
 
         const showCover = this.isThumbnailAvailable(thumbnail);
 
         return (
-            <li className="char__item">
+            <li onClick={() => this.props.onCharSelected(id)}
+                className="char__item">
                 <img className={classNames( {
-                    'char__name__cover' : showCover,
-                    'char__name__fill' : !showCover
-                })} src={thumbnail} alt={`${name} alt`}/>
+                    'char__image__cover' : showCover,
+                    'char__image__fill' : !showCover
+                })} src={thumbnail} alt={name}/>
                 <div className="char__name">{name}</div>
             </li>
         )
