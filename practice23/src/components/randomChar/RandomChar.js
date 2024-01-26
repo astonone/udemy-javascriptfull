@@ -4,23 +4,24 @@ import {Component} from "react";
 import MarvelService from "../../services/MarvelService";
 import Spinner from "../spinner/Spinner";
 import ErrorMessage from "../error/ErrorMessage";
+import classNames from "classnames";
 
 class RandomChar extends Component {
 
-    constructor(props) {
-        super(props);
-        this.updateChar();
-    }
-
     state = {
         char: {},
-        loading: true,
+        loading: false,
         error: false
     }
 
     marvelService = new MarvelService();
 
+    componentDidMount() {
+        this.updateChar();
+    }
+
     updateChar = () => {
+        this.setState({loading: true});
         const id = Math.floor(Math.random() * (1011400 - 1011000) + 1011000);
         this.marvelService
             .getCharacter(id)
@@ -54,7 +55,7 @@ class RandomChar extends Component {
                     <p className="randomchar__title">
                         Or choose another one
                     </p>
-                    <button className="button button__main">
+                    <button onClick={this.updateChar} className="button button__main">
                         <div className="inner">try it</div>
                     </button>
                     <img src={mjolnir} alt="mjolnir" className="randomchar__decoration"/>
@@ -77,12 +78,24 @@ class View extends Component {
         return desc;
     }
 
+    isThumbnailAvailable = (thumbnail) => {
+        if (!thumbnail) {
+            return false;
+        }
+        return !thumbnail.includes('image_not_available');
+    }
+
     render() {
         const {name, description, thumbnail, homepage, wiki} = this.props.char;
 
+        const showCover = this.isThumbnailAvailable(thumbnail);
+
         return (
             <div className="randomchar__block">
-                <img src={thumbnail} alt="Random character" className="randomchar__img"/>
+                <img className={classNames('randomchar__img', {
+                    'randomchar__img_cover' : showCover,
+                    'randomchar__img_contain' : !showCover
+                })} src={thumbnail} alt="Random character"/>
                 <div className="randomchar__info">
                     <p className="randomchar__name">{name}</p>
                     <p className="randomchar__descr">
