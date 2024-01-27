@@ -10,32 +10,46 @@ class CharList extends Component {
     state = {
         chars: [],
         loading: false,
-        error: false
+        error: false,
+        newItemsLoading: false,
+        offset: 210,
+        charsEnded: false
     }
 
     marvelService = new MarvelService();
 
     componentDidMount() {
+        this.setState({loading: true});
         this.loadCharacters();
     }
 
-    loadCharacters = () => {
-        this.setState({loading: true});
-        this.marvelService.getAllCharacters()
+    loadCharacters = (offset) => {
+        this.onCharListLoading();
+        this.marvelService.getAllCharacters(offset)
             .then(this.onCharacterLoaded)
             .catch(this.onError);
     }
 
-    onCharacterLoaded = (chars) => {
-        this.setState({chars, loading: false});
+    onCharacterLoaded = (newChars) => {
+        this.setState(prev => ({
+            chars: [...prev.chars, ...newChars],
+            loading: false,
+            newItemsLoading: false,
+            offset: prev.offset + 9,
+            charsEnded: newChars.length < 9
+        }));
     }
 
     onError = () => {
         this.setState({loading: false, error: true});
     }
 
+    onCharListLoading = () => {
+        this.setState({newItemsLoading: true});
+    }
+
     render() {
-        const {chars, error, loading} = this.state;
+        const {chars, error, loading, newItemsLoading, offset, charsEnded} = this.state;
 
         const errorMessage = error ? <ErrorMessage/> : null;
         const spinner = loading ? <Spinner/> : null;
@@ -48,7 +62,12 @@ class CharList extends Component {
         return (
             <div className="char__list">
                 {errorMessage || spinner || content}
-                <button className="button button__main button__long">
+                <button
+                    className="button button__main button__long"
+                    style={{'display': charsEnded ? 'none' : 'block'}}
+                    disabled={newItemsLoading}
+                    onClick={() => this.loadCharacters(offset)}
+                >
                     <div className="inner">load more</div>
                 </button>
             </div>
