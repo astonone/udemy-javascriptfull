@@ -4,6 +4,8 @@ import MarvelService from "../../services/MarvelService";
 import ErrorMessage from "../error/ErrorMessage";
 import Spinner from "../spinner/Spinner";
 import classNames from "classnames";
+import PropTypes from "prop-types";
+import CharInfo from "../charInfo/CharInfo";
 
 class CharList extends Component {
 
@@ -100,6 +102,10 @@ class CharItem extends Component {
             </li>
         )
     }
+}
+
+CharInfo.propTypes = {
+    onCharSelected: PropTypes.func.isRequired
 }
 
 export default CharList;

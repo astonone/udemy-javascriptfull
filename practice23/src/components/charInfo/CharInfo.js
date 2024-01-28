@@ -1,4 +1,5 @@
 import './charInfo.scss';
+import PropTypes from 'prop-types';
 import {Component} from "react";
 import MarvelService from "../../services/MarvelService";
 import ErrorMessage from "../error/ErrorMessage";
@@ -124,6 +125,10 @@ const ComicsItemView = ({comics}) => {
     return (
         <li className="char__comics-item">{comics.name}</li>
     )
+}
+
+CharInfo.propTypes = {
+    charId: PropTypes.number
 }
 
 export default CharInfo;
