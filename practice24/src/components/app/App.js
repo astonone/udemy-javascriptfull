@@ -1,9 +1,9 @@
 import AppHeader from "../appHeader/AppHeader";
-
-import decoration from '../../resources/img/vision.png';
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import MainPage from "../../pages/MainPage";
 import ComicsPage from "../../pages/ComicsPage";
+import Error404Page from "../../pages/Error404Page";
+import SingleComicPage from "../../pages/SingleComicPage";
 
 const App = () => {
 
@@ -15,8 +15,9 @@ const App = () => {
                     <Routes>
                         <Route path="/" element={<MainPage/>}/>
                         <Route path="/comics" element={<ComicsPage/>}/>
+                        <Route path="/comics/:comicId" element={<SingleComicPage/>}/>
+                        <Route path="*" element={<Error404Page/>}/>
                     </Routes>
-                    <img className="bg-decoration" src={decoration} alt="vision"/>
                 </main>
             </div>
         </BrowserRouter>

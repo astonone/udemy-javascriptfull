@@ -1,6 +1,7 @@
 import classNames from "classnames";
+import {Link} from "react-router-dom";
 
-const CharInfoView = ({char: {name, description, thumbnail, homepage, wiki, comics}}) => {
+const CharInfoView = ({char: {name, description, thumbnail, homepage, wiki}, comics}) => {
 
     const isThumbnailAvailable = (thumbnail) => {
         if (!thumbnail) {
@@ -16,10 +17,10 @@ const CharInfoView = ({char: {name, description, thumbnail, homepage, wiki, comi
         return desc;
     }
 
-    const comicsContent = comics.length
+    const comicsContent = comics && comics.length
         ? comics.length > 10
-            ? comics.slice(0, 10).map((item, i) => <li key={i} className="char__comics-item">{comics.name}</li>)
-            : comics.map((item, i) => <li key={i} className="char__comics-item">{comics.name}</li>)
+            ? comics.slice(0, 10).map((item, i) => <Link to={`/comics/${item.id}`} key={i} className="char__comics-item">{item.title}</Link>)
+            : comics.map((item, i) => <Link to={`/comics/${item.id}`} key={i} className="char__comics-item">{item.title}</Link>)
         : 'No comics found for selected character';
 
     return (
