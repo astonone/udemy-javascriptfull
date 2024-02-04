@@ -30,6 +30,10 @@ const ComicsList = () => {
         setComicsEnded(newComics.length > 8);
     }
 
+    const renderPrice = (price) => {
+        return price === 0 ? 'PRICE NOT AVAILABLE' : price + '$';
+    }
+
     const renderItems = (comics) => {
         const items = comics.map((item, index) => {
             return (
@@ -40,7 +44,7 @@ const ComicsList = () => {
                     <a href="#">
                         <img src={item.thumbnail} alt={item.thumbnail} className="comics__item-img"/>
                         <div className="comics__item-name">{item.title}</div>
-                        <div className="comics__item-price">{`${item.price}$`}</div>
+                        <div className="comics__item-price">{renderPrice(item.price)}</div>
                     </a>
                 </li>);
         });
