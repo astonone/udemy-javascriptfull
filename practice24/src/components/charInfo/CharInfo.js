@@ -9,17 +9,12 @@ import CharInfoView from "./CharInfoView";
 
 const CharInfo = ({charId}) => {
 
-    const {loading, error, getCharacter, getCharacterComics, clearError} = useMarvelService();
+    const {loading, error, getCharacter, clearError} = useMarvelService();
 
     const [char, setChar] = useState(null);
-    const [charComics, setCharComics] = useState(null);
 
     useEffect(() => {
         updateChar();
-    }, [charId]);
-
-    useEffect(() => {
-        updateCharComics();
     }, [charId]);
 
     useEffect(() => {
@@ -37,37 +32,20 @@ const CharInfo = ({charId}) => {
             .then(onCharLoaded);
     }
 
-    const updateCharComics = () => {
-        clearError();
-
-        if (!charId) {
-            return;
-        }
-
-        getCharacterComics(charId)
-            .then(onCharacterComics);
-    }
-
     const onCharLoaded = (char) => {
         setChar(char);
     }
 
-    const onCharacterComics = (charComics) => {
-        setCharComics(charComics);
-        console.log(charComics);
-    }
-
-    const skeleton = char || charComics || loading || error ? null : <Skeleton/>;
+    const skeleton = char || loading || error ? null : <Skeleton/>;
     const errorMessage = error ? <ErrorMessage/> : null;
     const spinner = loading ? <Spinner/> : null;
-    const content = !(loading && error && !char && !charComics) ? <CharInfoView char={char} comics={charComics}/> : null;
+    const content = !(loading && error && !char) ? <CharInfoView char={char} /> : null;
 
     return (
         <div className="char__info">
             {skeleton || errorMessage || spinner || content}
         </div>
-    )
-
+    );
 }
 
 CharInfo.propTypes = {

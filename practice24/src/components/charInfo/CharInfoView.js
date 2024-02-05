@@ -1,7 +1,33 @@
 import classNames from "classnames";
 import {Link} from "react-router-dom";
+import {useEffect, useState} from "react";
+import useMarvelService from "../../services/MarvelService";
+import ErrorMessage from "../error/ErrorMessage";
+import Spinner from "../spinner/Spinner";
 
-const CharInfoView = ({char: {name, description, thumbnail, homepage, wiki}, comics}) => {
+const CharInfoView = ({char: {id, name, description, thumbnail, homepage, wiki}}) => {
+
+    const {loading, error, getCharacterComics, clearError} = useMarvelService();
+    const [charComics, setCharComics] = useState(null);
+
+    useEffect(() => {
+        updateCharComics();
+    }, [id]);
+
+    const updateCharComics = () => {
+        clearError();
+
+        if (!id) {
+            return;
+        }
+
+        getCharacterComics(id)
+            .then(onCharacterComicsLoaded);
+    }
+
+    const onCharacterComicsLoaded = (charComics) => {
+        setCharComics(charComics);
+    }
 
     const isThumbnailAvailable = (thumbnail) => {
         if (!thumbnail) {
@@ -17,11 +43,15 @@ const CharInfoView = ({char: {name, description, thumbnail, homepage, wiki}, com
         return desc;
     }
 
-    const comicsContent = comics && comics.length
-        ? comics.length > 10
-            ? comics.slice(0, 10).map((item, i) => <Link to={`/comics/${item.id}`} key={i} className="char__comics-item">{item.title}</Link>)
-            : comics.map((item, i) => <Link to={`/comics/${item.id}`} key={i} className="char__comics-item">{item.title}</Link>)
+    const comicsContent = charComics && charComics.length
+        ? charComics.length > 10
+            ? charComics.slice(0, 10).map((item, i) => <Link to={`/comics/${item.id}`} key={i} className="char__comics-item">{item.title}</Link>)
+            : charComics.map((item, i) => <Link to={`/comics/${item.id}`} key={i} className="char__comics-item">{item.title}</Link>)
         : 'No comics found for selected character';
+
+    const errorMessage = error ? <ErrorMessage/> : null;
+    const spinner = loading ? <Spinner/> : null;
+    const content = !(loading && error && !charComics) ? comicsContent : null;
 
     return (
         <>
@@ -49,7 +79,7 @@ const CharInfoView = ({char: {name, description, thumbnail, homepage, wiki}, com
             </div>
             <div className="char__comics">Comics:</div>
             <ul className="char__comics-list">
-                {comicsContent}
+                {errorMessage || spinner || content}
             </ul>
         </>
     )
