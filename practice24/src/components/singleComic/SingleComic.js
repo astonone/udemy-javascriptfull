@@ -4,6 +4,7 @@ import useMarvelService from "../../services/MarvelService";
 import {useEffect, useState} from "react";
 import ErrorMessage from "../error/ErrorMessage";
 import Spinner from "../spinner/Spinner";
+import {Helmet} from "react-helmet";
 
 const SingleComic = () => {
     const {comicId} = useParams();
@@ -39,6 +40,13 @@ const SingleComic = () => {
     const renderComic = (comic) => {
         return (
             <div className="single-comic">
+                <Helmet>
+                    <meta
+                        name="description"
+                        content={`${comic.title} comic book`}
+                    />
+                    <title>{comic.title}</title>
+                </Helmet>
                 <img src={comic.thumbnail} alt={comic.title} className="single-comic__img"/>
                 <div className="single-comic__info">
                     <h2 className="single-comic__name">{comic.title}</h2>
