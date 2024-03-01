@@ -5,6 +5,7 @@ import CharInfo from "../components/charInfo/CharInfo";
 import {useState} from "react";
 import decoration from "../resources/img/vision.png";
 import {Helmet} from "react-helmet";
+import SearchChar from "../components/searchChar/SearchChar";
 
 const MainPage = () => {
 
@@ -30,9 +31,15 @@ const MainPage = () => {
                 <ErrorBoundary>
                     <CharList onCharSelected={onCharSelected}/>
                 </ErrorBoundary>
-                <ErrorBoundary>
-                    <CharInfo charId={selectedChar}/>
-                </ErrorBoundary>
+                <div className="char__content__right-panel">
+                    <ErrorBoundary>
+                        <CharInfo charId={selectedChar}/>
+                    </ErrorBoundary>
+                    <ErrorBoundary>
+                        <SearchChar />
+                    </ErrorBoundary>
+                </div>
+
             </div>
             <img className="bg-decoration" src={decoration} alt="vision"/>
         </>
