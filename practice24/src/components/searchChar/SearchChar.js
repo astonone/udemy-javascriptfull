@@ -1,8 +1,13 @@
 import './searchChar.scss';
 import {useForm} from "react-hook-form";
 import {Link} from "react-router-dom";
+import useMarvelService from "../../services/MarvelService";
+import {useState} from "react";
 
 const SearchChar = () => {
+
+    const [chars, setChars] = useState(null);
+    const {loading, getAllCharacters} = useMarvelService();
 
     const {
         register,
@@ -11,8 +16,37 @@ const SearchChar = () => {
     } = useForm({defaultValues: {charName: ''}})
 
     const onSubmit = (data) => {
-        console.log(data);
+        getAllCharacters(0, data.charName)
+            .then(onCharLoaded);
     }
+
+    const onCharLoaded = (chars) => {
+        setChars(chars);
+        console.log(chars);
+    }
+
+    const successMessage = (chars && chars.length) ?
+        (
+            <div className="char__search-wrapper">
+                <div className="char__search-success">{`There is! Visit ${chars[0].name} page?`}</div>
+                <Link to={`/character/${chars[0].id}`} className="button button__secondary">
+                    <div className="inner">To page</div>
+                </Link>
+            </div>
+        ) : null;
+
+    const errorMessage = (chars && !chars.length) ?
+        (
+            <div className="char__search-error">
+                The character was not found. Check the name and try again
+            </div>
+        ) : null;
+    const validationError = errors.charName ?
+        (
+            <div className="char__search-error">
+                This field is required
+            </div>
+        ) : null;
 
     return (
         <div className="char__search">
@@ -27,27 +61,17 @@ const SearchChar = () => {
                         {...register("charName", {required: true})}
                         id="charName"
                         type='text'
-                        placeholder="Enter name"/>
+                        placeholder="Enter name"
+                        onChange={() => setChars(null)}/>
                     <button
+                        disabled={loading}
                         type='submit'
                         className="button button__main">
                         <div className="inner">find</div>
                     </button>
                 </div>
             </form>
-            <div className="char__search-wrapper">
-                <div className="char__search-success">There is! Visit char-name page?</div>
-                <Link to={`/characters/${1}`} className="button button__secondary">
-                    <div className="inner">To page</div>
-                </Link>
-            </div>
-            <div className="char__search-error">
-                The character was not found. Check the name and try again
-            </div>
-            {errors.exampleRequired && <div className="char__search-error">
-                This field is required
-            </div>}
-
+            {validationError || successMessage || errorMessage}
         </div>
 
 
